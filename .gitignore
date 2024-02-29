@@ -1,3 +1,6 @@
+# notebook checkpoints
+**/.ipynb_checkpoints/*
+
 # Local .terraform directories
 **/.terraform/*
 
