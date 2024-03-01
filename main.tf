@@ -85,3 +85,12 @@ resource "aws_sagemaker_notebook_instance" "sagemaker_nbi" {
     "nccf:cost:mission" = "ncai"
   }
 }
+
+resource "aws_sagemaker_user_profile" "user_profile" {
+  for_each = toset(var.user_names)
+  domain_id = var.domain_id
+  user_profile_name = each.key
+  user_settings {
+    execution_role  = var.role_arn
+  }
+}

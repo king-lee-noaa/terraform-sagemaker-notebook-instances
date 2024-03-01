@@ -15,3 +15,5 @@ variable "instance_count" {
 variable "root_access" {
     default = "Disabled"
 }
+variable "domain_id" {}
+variable "user_names" {}
