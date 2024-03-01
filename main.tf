@@ -86,6 +86,30 @@ resource "aws_sagemaker_notebook_instance" "sagemaker_nbi" {
   }
 }
 
+resource "aws_sagemaker_notebook_instance" "sagemaker_nbi_gpu" {
+  count = var.instance_count
+  name          = "${var.notebook_name}-gpu-${format("%02d", count.index + 1)}"
+  role_arn      = var.role_arn
+  instance_type = var.gpu_instance_type
+  volume_size = var.volume_size
+  lifecycle_config_name = aws_sagemaker_notebook_instance_lifecycle_configuration.sagemaker_nbi_lc.name
+  root_access   = var.root_access
+
+  tags = {
+    "Name" = "sagemaker_notebook_gpu_instance-${format("%02d", count.index + 1)}"
+    "noaa:taskorder" = "gs-35f-131ca"
+    "noaa:fismaid" = "noaa5006"
+    "nccf:cost:provider" = "ncai"
+    "nccf:ssbox:project" = "ingest"
+    "nccf:ssbox:org" = "ncai"
+    "noaa:environment" = "ssbox"
+    "nccf:cost:function" = "work"
+    "noaa:lineoffice" = "nesdis"
+    "noaa:programoffice" = "40-02"
+    "nccf:cost:mission" = "ncai"
+  }
+}
+
 resource "aws_sagemaker_user_profile" "user_profile" {
   for_each = toset(var.user_names)
   domain_id = var.domain_id

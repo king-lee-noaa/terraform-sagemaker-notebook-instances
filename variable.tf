@@ -2,6 +2,9 @@ variable "region" {}
 variable "instance_type" {
     default = "ml.t3.medium"
 }
+variable "gpu_instance_type" {
+    default = "ml.g4dn.xlarge"
+}
 variable "notebook_name" {
     default = "default-instance-terraform"
 }
