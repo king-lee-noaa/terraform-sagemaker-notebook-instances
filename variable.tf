@@ -1,22 +1,19 @@
 variable "region" {}
-variable "instance_type" {
+variable "instance_type_01" {
     default = "ml.t3.medium"
 }
-variable "gpu_instance_type" {
-    default = "ml.g4dn.xlarge"
+variable "type_01_names" {}
+variable "instance_type_02" {
+    default = "ml.t2.medium"
 }
-variable "notebook_name" {
-    default = "default-instance-terraform"
-}
+variable "type_02_names" {}
 variable "role_arn" {}
 variable "volume_size" {
     default = "5"
-}
-variable "instance_count" {
-    default = "1"
 }
 variable "root_access" {
     default = "Disabled"
 }
 variable "domain_id" {}
 variable "user_names" {}
+variable "studio_lc_arn" {}

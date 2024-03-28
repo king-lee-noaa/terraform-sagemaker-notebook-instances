@@ -62,17 +62,17 @@ resource "aws_sagemaker_notebook_instance_lifecycle_configuration" "sagemaker_nb
               )
 }
 
-resource "aws_sagemaker_notebook_instance" "sagemaker_nbi" {
-  count = var.instance_count
-  name          = "${var.notebook_name}-${format("%02d", count.index + 1)}"
+resource "aws_sagemaker_notebook_instance" "sagemaker_nbi_type_01" {
+  for_each = toset(var.type_01_names)
+  name          = each.key
   role_arn      = var.role_arn
-  instance_type = var.instance_type
+  instance_type = var.instance_type_01
   volume_size = var.volume_size
   lifecycle_config_name = aws_sagemaker_notebook_instance_lifecycle_configuration.sagemaker_nbi_lc.name
   root_access   = var.root_access
 
   tags = {
-    "Name" = "sagemaker_notebook_instance-${format("%02d", count.index + 1)}"
+    "Name" = each.key
     "noaa:taskorder" = "gs-35f-131ca"
     "noaa:fismaid" = "noaa5006"
     "nccf:cost:provider" = "ncai"
@@ -86,17 +86,17 @@ resource "aws_sagemaker_notebook_instance" "sagemaker_nbi" {
   }
 }
 
-resource "aws_sagemaker_notebook_instance" "sagemaker_nbi_gpu" {
-  count = var.instance_count
-  name          = "${var.notebook_name}-gpu-${format("%02d", count.index + 1)}"
+resource "aws_sagemaker_notebook_instance" "sagemaker_nbi_type_02" {
+  for_each = toset(var.type_02_names)
+  name          = each.key
   role_arn      = var.role_arn
-  instance_type = var.gpu_instance_type
+  instance_type = var.instance_type_02
   volume_size = var.volume_size
   lifecycle_config_name = aws_sagemaker_notebook_instance_lifecycle_configuration.sagemaker_nbi_lc.name
   root_access   = var.root_access
 
   tags = {
-    "Name" = "sagemaker_notebook_gpu_instance-${format("%02d", count.index + 1)}"
+    "Name" = each.key
     "noaa:taskorder" = "gs-35f-131ca"
     "noaa:fismaid" = "noaa5006"
     "nccf:cost:provider" = "ncai"
@@ -116,5 +116,11 @@ resource "aws_sagemaker_user_profile" "user_profile" {
   user_profile_name = each.key
   user_settings {
     execution_role  = var.role_arn
+    jupyter_server_app_settings {
+        default_resource_spec {
+          lifecycle_config_arn = var.studio_lc_arn
+        }
+        lifecycle_config_arns = [ var.studio_lc_arn ]
+    }
   }
 }
