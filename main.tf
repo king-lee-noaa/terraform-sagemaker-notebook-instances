@@ -67,7 +67,7 @@ resource "aws_sagemaker_notebook_instance" "sagemaker_nbi_type_01" {
   name          = each.key
   role_arn      = var.role_arn
   instance_type = var.instance_type_01
-  volume_size = var.volume_size
+  volume_size = var.volume_size_01
   lifecycle_config_name = aws_sagemaker_notebook_instance_lifecycle_configuration.sagemaker_nbi_lc.name
   root_access   = var.root_access
 
@@ -91,7 +91,7 @@ resource "aws_sagemaker_notebook_instance" "sagemaker_nbi_type_02" {
   name          = each.key
   role_arn      = var.role_arn
   instance_type = var.instance_type_02
-  volume_size = var.volume_size
+  volume_size = var.volume_size_02
   lifecycle_config_name = aws_sagemaker_notebook_instance_lifecycle_configuration.sagemaker_nbi_lc.name
   root_access   = var.root_access
 

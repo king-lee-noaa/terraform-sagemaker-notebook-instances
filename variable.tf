@@ -3,14 +3,17 @@ variable "instance_type_01" {
     default = "ml.t3.medium"
 }
 variable "type_01_names" {}
+variable "volume_size_01" {
+    default = "5"
+}
 variable "instance_type_02" {
     default = "ml.t2.medium"
 }
 variable "type_02_names" {}
-variable "role_arn" {}
-variable "volume_size" {
+variable "volume_size_02" {
     default = "5"
 }
+variable "role_arn" {}
 variable "root_access" {
     default = "Disabled"
 }
