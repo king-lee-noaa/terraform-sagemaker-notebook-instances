@@ -8,10 +8,13 @@
 # -------------------------------------
 
 resource "aws_sagemaker_notebook_instance_lifecycle_configuration" "sagemaker_nbi_lc" {
-  name      = "nbi-lifecycle"
+  for_each  = var.code_repositories
+  name      = "nbi-lifecycle-${each.key}"
   on_create = base64encode(<<-EOF
                 #!/usr/bin/bash
-                git clone https://github.com/king-lee-noaa/learning-journey.git /home/ec2-user/SageMaker/learning-journey -b notebook-instance
+                
+                sudo -i -u ec2-user git clone "${each.value}" "SageMaker/AmazonSageMaker-${each.key}"
+                
               EOF
               )
   on_start  = base64encode(<<-EOF
@@ -63,12 +66,12 @@ resource "aws_sagemaker_notebook_instance_lifecycle_configuration" "sagemaker_nb
 }
 
 resource "aws_sagemaker_notebook_instance" "sagemaker_nbi_type_01" {
-  for_each = toset(var.type_01_names)
+  for_each = var.type_01_names
   name          = each.key
   role_arn      = var.role_arn
   instance_type = var.instance_type_01
   volume_size = var.volume_size_01
-  lifecycle_config_name = aws_sagemaker_notebook_instance_lifecycle_configuration.sagemaker_nbi_lc.name
+  lifecycle_config_name = aws_sagemaker_notebook_instance_lifecycle_configuration.sagemaker_nbi_lc["${each.value}"].name
   root_access   = var.root_access
 
   tags = {
@@ -84,15 +87,19 @@ resource "aws_sagemaker_notebook_instance" "sagemaker_nbi_type_01" {
     "noaa:programoffice" = "40-02"
     "nccf:cost:mission" = "ncai"
   }
+  
+  depends_on = [
+    aws_sagemaker_notebook_instance_lifecycle_configuration.sagemaker_nbi_lc
+  ]
 }
 
 resource "aws_sagemaker_notebook_instance" "sagemaker_nbi_type_02" {
-  for_each = toset(var.type_02_names)
+  for_each = var.type_02_names
   name          = each.key
   role_arn      = var.role_arn
   instance_type = var.instance_type_02
   volume_size = var.volume_size_02
-  lifecycle_config_name = aws_sagemaker_notebook_instance_lifecycle_configuration.sagemaker_nbi_lc.name
+  lifecycle_config_name = aws_sagemaker_notebook_instance_lifecycle_configuration.sagemaker_nbi_lc["${each.value}"].name
   root_access   = var.root_access
 
   tags = {
@@ -108,19 +115,23 @@ resource "aws_sagemaker_notebook_instance" "sagemaker_nbi_type_02" {
     "noaa:programoffice" = "40-02"
     "nccf:cost:mission" = "ncai"
   }
+  
+  depends_on = [
+    aws_sagemaker_notebook_instance_lifecycle_configuration.sagemaker_nbi_lc
+  ]
 }
 
 resource "aws_sagemaker_user_profile" "user_profile" {
-  for_each = toset(var.user_names)
+  for_each = var.user_names
   domain_id = var.domain_id
   user_profile_name = each.key
   user_settings {
     execution_role  = var.role_arn
     jupyter_server_app_settings {
         default_resource_spec {
-          lifecycle_config_arn = var.studio_lc_arn
+          lifecycle_config_arn = var.studio_lc_arns[each.value]
         }
-        lifecycle_config_arns = [ var.studio_lc_arn ]
+        lifecycle_config_arns = [ var.studio_lc_arns[each.value] ]
     }
   }
 }

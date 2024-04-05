@@ -1,5 +1,5 @@
-output "aws_sagemaker_notebook_instance_lifecycle" {
-    value = aws_sagemaker_notebook_instance_lifecycle_configuration.sagemaker_nbi_lc.name
+output "aws_sagemaker_notebook_instance_lifecycles" {
+    value = values(aws_sagemaker_notebook_instance_lifecycle_configuration.sagemaker_nbi_lc).*.name
 }
 
 output "aws_sagemaker_notebook_type_01_names" {
