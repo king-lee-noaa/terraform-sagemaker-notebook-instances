@@ -73,7 +73,10 @@ resource "aws_sagemaker_notebook_instance" "sagemaker_nbi_type_01" {
   volume_size = var.volume_size_01
   lifecycle_config_name = aws_sagemaker_notebook_instance_lifecycle_configuration.sagemaker_nbi_lc["${each.value}"].name
   root_access   = var.root_access
-
+  subnet_id     = var.subnet_id
+  security_groups = var.security_groups
+  direct_internet_access = var.direct_internet_access
+  
   tags = {
     "Name" = each.key
     "noaa:taskorder" = "gs-35f-131ca"
@@ -101,6 +104,9 @@ resource "aws_sagemaker_notebook_instance" "sagemaker_nbi_type_02" {
   volume_size = var.volume_size_02
   lifecycle_config_name = aws_sagemaker_notebook_instance_lifecycle_configuration.sagemaker_nbi_lc["${each.value}"].name
   root_access   = var.root_access
+  subnet_id     = var.subnet_id
+  security_groups = var.security_groups
+  direct_internet_access = var.direct_internet_access  
 
   tags = {
     "Name" = each.key
@@ -121,17 +127,17 @@ resource "aws_sagemaker_notebook_instance" "sagemaker_nbi_type_02" {
   ]
 }
 
-resource "aws_sagemaker_user_profile" "user_profile" {
-  for_each = var.user_names
-  domain_id = var.domain_id
-  user_profile_name = each.key
-  user_settings {
-    execution_role  = var.role_arn
-    jupyter_server_app_settings {
-        default_resource_spec {
-          lifecycle_config_arn = var.studio_lc_arns[each.value]
-        }
-        lifecycle_config_arns = [ var.studio_lc_arns[each.value] ]
-    }
-  }
-}
+#resource "aws_sagemaker_user_profile" "user_profile" {
+#  for_each = var.user_names
+#  domain_id = var.domain_id
+#  user_profile_name = each.key
+#  user_settings {
+#    execution_role  = var.role_arn
+#    jupyter_server_app_settings {
+#        default_resource_spec {
+#          lifecycle_config_arn = var.studio_lc_arns[each.value]
+#        }
+#        lifecycle_config_arns = [ var.studio_lc_arns[each.value] ]
+#    }
+#  }
+#}

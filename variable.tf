@@ -4,6 +4,11 @@ variable "role_arn" {}
 variable "root_access" {
     default = "Disabled"
 }
+variable "subnet_id" {}
+variable "security_groups" {}
+variable "direct_internet_access" {
+    default = "Disabled"
+}
 variable "code_repositories" {
     type  = map(string)
 }
