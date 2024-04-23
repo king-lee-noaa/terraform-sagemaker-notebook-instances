@@ -9,6 +9,7 @@ variable "security_groups" {}
 variable "direct_internet_access" {
     default = "Disabled"
 }
+variable "kms_key_id" {}
 variable "code_repositories" {
     type  = map(string)
 }

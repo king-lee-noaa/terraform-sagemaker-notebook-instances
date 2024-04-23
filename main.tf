@@ -76,6 +76,7 @@ resource "aws_sagemaker_notebook_instance" "sagemaker_nbi_type_01" {
   subnet_id     = var.subnet_id
   security_groups = var.security_groups
   direct_internet_access = var.direct_internet_access
+  kms_key_id    = var.kms_key_id
   
   tags = {
     "Name" = each.key
@@ -106,7 +107,8 @@ resource "aws_sagemaker_notebook_instance" "sagemaker_nbi_type_02" {
   root_access   = var.root_access
   subnet_id     = var.subnet_id
   security_groups = var.security_groups
-  direct_internet_access = var.direct_internet_access  
+  direct_internet_access = var.direct_internet_access
+  kms_key_id    = var.kms_key_id
 
   tags = {
     "Name" = each.key
