@@ -129,17 +129,17 @@ resource "aws_sagemaker_notebook_instance" "sagemaker_nbi_type_02" {
   ]
 }
 
-#resource "aws_sagemaker_user_profile" "user_profile" {
-#  for_each = var.user_names
-#  domain_id = var.domain_id
-#  user_profile_name = each.key
-#  user_settings {
-#    execution_role  = var.role_arn
-#    jupyter_server_app_settings {
-#        default_resource_spec {
-#          lifecycle_config_arn = var.studio_lc_arns[each.value]
-#        }
-#        lifecycle_config_arns = [ var.studio_lc_arns[each.value] ]
-#    }
-#  }
-#}
+resource "aws_sagemaker_user_profile" "user_profile" {
+  for_each = var.user_names
+  domain_id = var.domain_id
+  user_profile_name = each.key
+  user_settings {
+    execution_role  = var.role_arn
+    jupyter_server_app_settings {
+        default_resource_spec {
+          lifecycle_config_arn = var.studio_lc_arns[each.value]
+        }
+        lifecycle_config_arns = [ var.studio_lc_arns[each.value] ]
+    }
+  }
+}
