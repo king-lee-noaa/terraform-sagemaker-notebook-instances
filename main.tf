@@ -129,6 +129,25 @@ resource "aws_sagemaker_notebook_instance" "sagemaker_nbi_type_02" {
   ]
 }
 
+resource "aws_sagemaker_studio_lifecycle_config" "sagemaker_studio_lc" {
+  for_each  = var.studio_lc_arns
+  studio_lifecycle_config_name     = "studio-lifecycle-${each.key}"
+  studio_lifecycle_config_app_type = "JupyterServer"
+  studio_lifecycle_config_content  = base64encode(<<-EOF
+                #!/bin/bash
+
+                dest_dir="/home/sagemaker-user/.AmazonSageMaker-studio-lc-script"
+                git_repo_url="https://git-codecommit.us-east-1.amazonaws.com/v1/repos/AmazonSageMaker-studio-lc-script"
+                if ! git clone "$git_repo_url" "$dest_dir" 2>/dev/null && [ -d "$dest_dir" ] ; then
+                    echo "Skipped git clone because the folder $dest_dir exists"
+                fi
+
+                chmod +x $dest_dir/studio-lc.sh
+                $dest_dir/studio-lc.sh ${each.key}
+              EOF
+              )
+}
+
 resource "aws_sagemaker_user_profile" "user_profile" {
   for_each = var.user_names
   domain_id = var.domain_id
