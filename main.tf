@@ -90,6 +90,7 @@ resource "aws_sagemaker_notebook_instance" "sagemaker_nbi_type_01" {
     "noaa:lineoffice" = "nesdis"
     "noaa:programoffice" = "40-02"
     "nccf:cost:mission" = "ncai"
+    "ncis:ncia:ljourney" = each.value
   }
   
   depends_on = [
@@ -122,6 +123,7 @@ resource "aws_sagemaker_notebook_instance" "sagemaker_nbi_type_02" {
     "noaa:lineoffice" = "nesdis"
     "noaa:programoffice" = "40-02"
     "nccf:cost:mission" = "ncai"
+    "ncis:ncia:ljourney" = each.value
   }
   
   depends_on = [
